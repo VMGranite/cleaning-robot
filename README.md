@@ -1,7 +1,6 @@
-# Veronica's Tibber Microservice #
+# Veronica's Cleaning Robot Microservice #
 ## To run the project locally: ##
-1. Open your terminal and navigate to the project folder: <br>
-**./veronicas-tibber-microservice**
+1. Open your terminal and navigate to the project folder
 1. Run `npm i`
 1. Run `docker-compose up --build`
 
