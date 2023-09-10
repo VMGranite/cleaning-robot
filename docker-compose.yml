@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  api:
+    container_name: api
+    restart: always
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+
+  db:
+    container_name: postgres
+    image: postgres
+    restart: always
+    ports:
+      - '5433:${DB_PORT}'
+    volumes:
+      # - ./db/postgresql.conf:/etc/postgresql/postgresql.conf  
+      # - ./db/partitioned-database-seed.sql:/docker-entrypoint-initdb.d/partitioned-database-seed.sql
+      - ./db/database-seed.sql:/docker-entrypoint-initdb.d/database-seed.sql
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    # command: postgres -c config_file=/etc/postgresql/postgresql.conf 
+
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
