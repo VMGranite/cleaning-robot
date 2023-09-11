@@ -32,55 +32,8 @@ BEFORE UPDATE ON grid_coordinates
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at();
 
--- Populate an X,Y grid from -10 to 10 
+-- Populate an X,Y grid from -10 to 10
 INSERT INTO grid_coordinates (x, y)
 SELECT x, y
-FROM (
-    SELECT x, y
-    FROM (
-        SELECT -10 AS x
-        UNION ALL SELECT -9
-        UNION ALL SELECT -8
-        UNION ALL SELECT -7
-        UNION ALL SELECT -6
-        UNION ALL SELECT -5
-        UNION ALL SELECT -4
-        UNION ALL SELECT -3
-        UNION ALL SELECT -2
-        UNION ALL SELECT -1
-        UNION ALL SELECT 0
-        UNION ALL SELECT 1
-        UNION ALL SELECT 2
-        UNION ALL SELECT 3
-        UNION ALL SELECT 4
-        UNION ALL SELECT 5
-        UNION ALL SELECT 6
-        UNION ALL SELECT 7
-        UNION ALL SELECT 8
-        UNION ALL SELECT 9
-        UNION ALL SELECT 10
-    ) AS x_values
-    CROSS JOIN (
-        SELECT -10 AS y
-        UNION ALL SELECT -9
-        UNION ALL SELECT -8
-        UNION ALL SELECT -7
-        UNION ALL SELECT -6
-        UNION ALL SELECT -5
-        UNION ALL SELECT -4
-        UNION ALL SELECT -3
-        UNION ALL SELECT -2
-        UNION ALL SELECT -1
-        UNION ALL SELECT 0
-        UNION ALL SELECT 1
-        UNION ALL SELECT 2
-        UNION ALL SELECT 3
-        UNION ALL SELECT 4
-        UNION ALL SELECT 5
-        UNION ALL SELECT 6
-        UNION ALL SELECT 7
-        UNION ALL SELECT 8
-        UNION ALL SELECT 9
-        UNION ALL SELECT 10
-    ) AS y_values
-) AS grid;
+FROM generate_series(-10, 10) AS x
+CROSS JOIN generate_series(-10, 10) AS y;
