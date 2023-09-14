@@ -93,34 +93,3 @@ BEGIN
     END LOOP;
     COMMIT;
 END $$;
-
--- Create a trigger function to update updated_at
-CREATE OR REPLACE FUNCTION update_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW IS DISTINCT FROM OLD THEN  
-        NEW.updated_at = NOW();
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER partition1_update_updated_at
-BEFORE UPDATE ON grid_coordinates_partition1
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER partition2_update_updated_at
-BEFORE UPDATE ON grid_coordinates_partition2
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER partition3_update_updated_at
-BEFORE UPDATE ON grid_coordinates_partition3
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER partition4_update_updated_at
-BEFORE UPDATE ON grid_coordinates_partition4
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at();

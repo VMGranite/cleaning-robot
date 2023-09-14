@@ -15,7 +15,7 @@ export async function isAreaCleaned(input_x: number, input_y: number): Promise<b
 export async function updateAreaToClean(input_x: number, input_y: number): Promise<void> {
     try {
         const partition_name = getDesignatedPartition(input_x, input_y)
-        await pool.query(`UPDATE ${partition_name} SET is_cleaned = TRUE WHERE x = $1 AND y = $2`, [input_x, input_y]);
+        await pool.query(`UPDATE ${partition_name} SET is_cleaned = TRUE, updated_at = NOW() WHERE x = $1 AND y = $2`, [input_x, input_y]);
         console.log('is_cleaned set to true.');
     } catch (error) {
         console.error('Error updating data:', error);
@@ -27,7 +27,7 @@ export async function makeFloorDirty(): Promise<void> {
     try {
         var full_query = ""
         for (let i = 1; i <= 4; i++) {
-            var query = "UPDATE grid_coordinates_partition" + i + " SET is_cleaned = FALSE;"
+            var query = "UPDATE grid_coordinates_partition" + i + " SET is_cleaned = FALSE, updated_at = NOW();"
             full_query += query
         }
         await pool.query(full_query);
