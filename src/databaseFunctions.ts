@@ -2,8 +2,7 @@ import { pool } from './app';
 
 export async function isAreaCleaned(input_x: number, input_y: number): Promise<boolean> {
     try {
-        const partition = checkDesignatedPartition(input_x, input_y)
-        const partition_name = 'grid_coordinates_partition' + partition
+        const partition_name = getDesignatedPartition(input_x, input_y)
         const data = await pool.query(`SELECT is_cleaned FROM ${partition_name} WHERE x = $1 AND y = $2`, [input_x, input_y]);
         return data.rows[0].is_cleaned;
 
@@ -15,8 +14,7 @@ export async function isAreaCleaned(input_x: number, input_y: number): Promise<b
 
 export async function updateAreaToClean(input_x: number, input_y: number): Promise<void> {
     try {
-        const partition = checkDesignatedPartition(input_x, input_y)
-        const partition_name = 'grid_coordinates_partition' + partition
+        const partition_name = getDesignatedPartition(input_x, input_y)
         await pool.query(`UPDATE ${partition_name} SET is_cleaned = TRUE WHERE x = $1 AND y = $2`, [input_x, input_y]);
         console.log('is_cleaned set to true.');
     } catch (error) {
@@ -68,17 +66,18 @@ export async function getLastTripEntryIdAndTimeStamp(): Promise<{ id: string; ti
     }
 }
 
-function checkDesignatedPartition(input_x: number, input_y: number): number {
+function getDesignatedPartition(input_x: number, input_y: number): string {
+    var partition_name = 'grid_coordinates_partition';
     if (input_x >= 0 && input_y >= 0) {
-        return 1
+        return partition_name + '1';
     } else if (input_x >= 0 && input_y <= -1) {
-        return 2
+        return partition_name + '2';
     } else if (input_x <= -1 && input_y <= -1) {
-        return 3
-    } else if (input_x <= -1 && input_y >= -0) {
-        return 4
+        return partition_name + '3';
+    } else if (input_x <= -1 && input_y >= 0) {
+        return partition_name + '4';
     } else {
         console.log('This is an invalid partition option.');
-        return 0
+        return 'INVALID TABLE NAME';
     }
 }
