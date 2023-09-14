@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
 import { getLastTripEntryIdAndTimeStamp, makeFloorDirty, recordTripResult } from './databaseFunctions'
-// import { getLastTripEntryIdAndTimeStamp, makeFloorDirty, recordTripResult } from './databaseFunctionsForPartitionedTables'
 import { Calculations } from "./calculations";
 
 import dotenv from "dotenv";

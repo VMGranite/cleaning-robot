@@ -18,13 +18,10 @@ services:
     ports:
       - '5433:${DB_PORT}'
     volumes:
-      # - ./db/postgresql.conf:/etc/postgresql/postgresql.conf  
-      # - ./db/partitioned-database-seed.sql:/docker-entrypoint-initdb.d/partitioned-database-seed.sql
       - ./db/database-seed.sql:/docker-entrypoint-initdb.d/database-seed.sql
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
-    # command: postgres -c config_file=/etc/postgresql/postgresql.conf 
 
   pgadmin-compose:
     image: dpage/pgadmin4
