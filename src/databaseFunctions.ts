@@ -27,7 +27,12 @@ export async function updateAreaToClean(input_x: number, input_y: number): Promi
 
 export async function makeFloorDirty(): Promise<void> {
     try {
-        await pool.query('UPDATE grid_coordinates_partition1 SET is_cleaned = FALSE; UPDATE grid_coordinates_partition2 SET is_cleaned = FALSE; UPDATE grid_coordinates_partition3 SET is_cleaned = FALSE; UPDATE grid_coordinates_partition4 SET is_cleaned = FALSE;');
+        var full_query = ""
+        for (let i = 1; i <= 4; i++) {
+            var query = "UPDATE grid_coordinates_partition" + i + " SET is_cleaned = FALSE;"
+            full_query += query
+        }
+        await pool.query(full_query);
         console.log('The Floor is dirty!');
     } catch (error) {
         console.error('Error updating data:', error);
