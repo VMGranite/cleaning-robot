@@ -1,5 +1,4 @@
 import { isAreaCleaned, updateAreaToClean } from './databaseFunctions'
-// import { isAreaCleaned, updateAreaToClean } from './databaseFunctionsForPartitionedTables'
 
 export class Calculations {
     private current_x_location: number = 0
